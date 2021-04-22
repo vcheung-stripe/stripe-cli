@@ -50,7 +50,7 @@ go-mod-tidy:
 .PHONY: go-mod-tidy
 
 # Run all the tests and code checks
-ci: build-all-platforms test lint go-mod-tidy
+ci: build-all-platforms test lint go-mod-tidy protoc-ci
 .PHONY: ci
 
 # Build a beta version of stripe
@@ -115,6 +115,12 @@ clean:
 # Compile protobuf definitions and generate protobuf docs
 protoc: protoc-compile protoc-docs
 .PHONY: protoc
+
+# Generate all files from protobuf definitions and compare against head
+protoc-ci: protoc
+	@git diff HEAD
+	@git diff-index --quiet HEAD
+.PHONY: proto-ci
 
 # Compile protobuf definitions
 protoc-compile:
